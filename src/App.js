@@ -1,10 +1,16 @@
 import React, { Component } from "react";
 import "./App.css";
+import axios from "axios";
 
 class App extends Component {
-  componentDidMount = () => {
-    this.renderMap();
+  state = {
+    venues: []
   };
+
+  componentDidMount() {
+    this.getVenues();
+    this.renderMap();
+  }
 
   renderMap = () => {
     loadScript(
@@ -13,9 +19,31 @@ class App extends Component {
     window.initMap = this.initMap;
   };
 
+  getVenues = () => {
+    const endPoint = "https://api.foursquare.com/v2/venues/explore?";
+    const parameters = {
+      client_id: "SEUCL1M05UTPL3Z3U0HC2SKNULTU2JI4JY0HAM0ZXLAVNIUW",
+      client_secret: "WBBHHBLA1AF5O5JF45X5QJKPGWYILXGI5T1FT3RDB4TIP4N1",
+      query: "food",
+      near: "Dublin, IE",
+      v: "20182208"
+    };
+
+    axios
+      .get(endPoint + new URLSearchParams(parameters))
+      .then(response => {
+        this.setState({
+          venues: response.data.response.groups[0].items
+        });
+      })
+      .catch(error => {
+        console.log("ERROR!!! " + error);
+      });
+  };
+
   initMap = () => {
     const map = new window.google.maps.Map(document.getElementById("map"), {
-      center: { lat: -34.397, lng: 150.644 },
+      center: { lat: 53.333, lng: -6.249 },
       zoom: 8
     });
   };
@@ -28,10 +56,6 @@ class App extends Component {
     );
   }
 }
-
-/*
-<script src="https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY&callback=initMap" async defer></script>
-*/
 
 function loadScript(url) {
   var index = window.document.getElementsByTagName("script")[0];
