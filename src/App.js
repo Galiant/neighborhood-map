@@ -43,13 +43,21 @@ class App extends Component {
       });
   };
 
+  // Create a map
   initMap = () => {
     var map = new window.google.maps.Map(document.getElementById("map"), {
       center: { lat: 53.333, lng: -6.249 },
-      zoom: 8
+      zoom: 12
     });
 
+    // Create an info window
+    var infowindow = new window.google.maps.InfoWindow();
+
+    // Display dynamic markers
     this.state.venues.map(myVenue => {
+      var contentString = `${myVenue.venue.name}`;
+
+      // Create marker
       var marker = new window.google.maps.Marker({
         position: {
           lat: myVenue.venue.location.lat,
@@ -57,6 +65,15 @@ class App extends Component {
         },
         map: map,
         title: myVenue.venue.name
+      });
+
+      // Click on marker
+      marker.addListener("click", function() {
+        // Change the content
+        infowindow.setContent(contentString);
+
+        // Open an info window
+        infowindow.open(map, marker);
       });
     });
   };
