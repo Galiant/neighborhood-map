@@ -9,12 +9,11 @@ class App extends Component {
 
   componentDidMount() {
     this.getVenues();
-    this.renderMap();
   }
 
   renderMap = () => {
     loadScript(
-      "https://maps.googleapis.com/maps/api/js?key=AIzaSyC5oHlAGTECgOyBP7WQCMCaqrpjNPCPeaU&callback=initMap"
+      "https://maps.googleapis.com/maps/api/js?key=AIzaSyAtG0Ps2kXa-IWaGlwCSYAvGJW57czVJhY&callback=initMap"
     );
     window.initMap = this.initMap;
   };
@@ -32,9 +31,12 @@ class App extends Component {
     axios
       .get(endPoint + new URLSearchParams(parameters))
       .then(response => {
-        this.setState({
-          venues: response.data.response.groups[0].items
-        });
+        this.setState(
+          {
+            venues: response.data.response.groups[0].items
+          },
+          this.renderMap()
+        );
       })
       .catch(error => {
         console.log("ERROR!!! " + error);
@@ -42,9 +44,20 @@ class App extends Component {
   };
 
   initMap = () => {
-    const map = new window.google.maps.Map(document.getElementById("map"), {
+    var map = new window.google.maps.Map(document.getElementById("map"), {
       center: { lat: 53.333, lng: -6.249 },
       zoom: 8
+    });
+
+    this.state.venues.map(myVenue => {
+      var marker = new window.google.maps.Marker({
+        position: {
+          lat: myVenue.venue.location.lat,
+          lng: myVenue.venue.location.lng
+        },
+        map: map,
+        title: myVenue.venue.name
+      });
     });
   };
 
