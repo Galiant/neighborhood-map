@@ -9,6 +9,11 @@ body {
   padding: 0;
 }
 
+.title {
+  text-align: center;
+  color: coral;
+}
+
 #map {
   height: 100vh;
 }
@@ -16,6 +21,11 @@ body {
 .search {
   display: inline-block;
   position: absolute;
-  top: 0;
+  top: 10vw;
   padding: 20px;
+}
+
+.search-input {
+  padding: 10px;
+  margin-bottom: 15px;
 }

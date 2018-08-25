@@ -47,8 +47,8 @@ class App extends Component {
   // Create a map
   initMap = () => {
     var map = new window.google.maps.Map(document.getElementById("map"), {
-      center: { lat: 53.333, lng: -6.249 },
-      zoom: 12
+      center: { lat: 53.34, lng: -6.265 },
+      zoom: 13
     });
 
     // Create an info window
@@ -84,8 +84,9 @@ class App extends Component {
   render() {
     return (
       <main>
+        <h1 className="title">Dublin Food</h1>
         <div id="map" />
-        <Search />
+        <Search venues={this.state.venues} />
       </main>
     );
   }
