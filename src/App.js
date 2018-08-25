@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import "./App.css";
+import Search from "./Search";
 import axios from "axios";
 
 class App extends Component {
@@ -8,7 +9,7 @@ class App extends Component {
   };
 
   componentDidMount() {
-    this.getVenues();
+    this.getData();
   }
 
   renderMap = () => {
@@ -18,7 +19,7 @@ class App extends Component {
     window.initMap = this.initMap;
   };
 
-  getVenues = () => {
+  getData = () => {
     const endPoint = "https://api.foursquare.com/v2/venues/explore?";
     const parameters = {
       client_id: "SEUCL1M05UTPL3Z3U0HC2SKNULTU2JI4JY0HAM0ZXLAVNIUW",
@@ -55,7 +56,9 @@ class App extends Component {
 
     // Display dynamic markers
     this.state.venues.map(myVenue => {
-      var contentString = `${myVenue.venue.name}`;
+      var contentString = `${myVenue.venue.name}, ${
+        myVenue.venue.location.address
+      }`;
 
       // Create marker
       var marker = new window.google.maps.Marker({
@@ -82,6 +85,7 @@ class App extends Component {
     return (
       <main>
         <div id="map" />
+        <Search />
       </main>
     );
   }

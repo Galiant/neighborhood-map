@@ -12,3 +12,10 @@ body {
 #map {
   height: 100vh;
 }
+
+.search {
+  display: inline-block;
+  position: absolute;
+  top: 0;
+  padding: 20px;
+}
