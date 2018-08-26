@@ -41,3 +41,9 @@ npm start
 ```
 http://localhost:3000
 ```
+
+## Dependencies
+
+- [React framework](https://reactjs.org/)
+- [Maps JavaScript API](https://developers.google.com/maps/documentation/javascript/tutorial)
+- [Foursquare API](https://foursquare.com/)
