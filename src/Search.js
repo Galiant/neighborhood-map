@@ -38,11 +38,19 @@ class Search extends Component {
           onChange={e => this.displayQuery(e.target.value)}
           className="search-input"
         />
-        {this.state.matchVenue.map(myVenue => {
+
+        {this.props.venues.map(myVenue => {
+          const isMatch =
+            !this.state.query ||
+            this.state.matchVenue.find(mv => {
+              return mv.venue.id === myVenue.venue.id;
+            });
+          if (!isMatch) return null;
+
           return (
             <Locations
               key={myVenue.venue.id}
-              venues={this.state.matchVenue}
+              venues={this.state.venues}
               markers={this.props.markers}
               myVenue={myVenue}
               contentString={this.props.contentString}
