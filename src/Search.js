@@ -16,7 +16,9 @@ class Search extends Component {
             <Locations
               key={myVenue.venue.id}
               venues={this.props.venues}
+              markers={this.props.markers}
               myVenue={myVenue}
+              contentString={this.props.contentString}
             />
           );
         })}

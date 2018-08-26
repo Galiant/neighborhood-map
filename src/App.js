@@ -5,7 +5,9 @@ import axios from "axios";
 
 class App extends Component {
   state = {
-    venues: []
+    venues: [],
+    markers: [],
+    selectedMarker: []
   };
 
   componentDidMount() {
@@ -52,7 +54,7 @@ class App extends Component {
     });
 
     // Create an info window
-    var infowindow = new window.google.maps.InfoWindow();
+    var infoWindow = new window.google.maps.InfoWindow();
 
     // Display dynamic markers
     this.state.venues.map(myVenue => {
@@ -67,17 +69,19 @@ class App extends Component {
           lng: myVenue.venue.location.lng
         },
         map: map,
-        title: myVenue.venue.name
+        title: myVenue.venue.name,
+        id: myVenue.venue.id
       });
 
       // Click on marker
       marker.addListener("click", function() {
         // Change the content
-        infowindow.setContent(contentString);
+        infoWindow.setContent(contentString);
 
         // Open an info window
-        infowindow.open(map, marker);
+        infoWindow.open(map, marker);
       });
+      this.state.markers.push(marker);
     });
   };
 
@@ -86,7 +90,11 @@ class App extends Component {
       <main>
         <h1 className="title">Dublin Food</h1>
         <div id="map" />
-        <Search venues={this.state.venues} />
+        <Search
+          venues={this.state.venues}
+          markers={this.state.markers}
+          contentString={this.contentString}
+        />
       </main>
     );
   }
