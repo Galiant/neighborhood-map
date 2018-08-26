@@ -52,8 +52,10 @@ class Search extends Component {
               key={myVenue.venue.id}
               venues={this.state.venues}
               markers={this.props.markers}
-              myVenue={myVenue}
               contentString={this.props.contentString}
+              myVenue={myVenue}
+              updateInfoWindow={this.props.updateInfoWindow}
+              openInfoWindow={this.props.openInfoWindow}
             />
           );
         })}

@@ -1,17 +1,21 @@
 import React, { Component } from "react";
 import "./App.css";
 import Search from "./Search";
+import Error from "./Error";
 import axios from "axios";
 
 class App extends Component {
   state = {
     venues: [],
     markers: [],
-    selectedMarker: []
+    error: false
   };
 
   componentDidMount() {
     this.getData();
+    if (window.google === undefined) {
+      this.setState({ error: true });
+    }
   }
 
   renderMap = () => {
@@ -21,6 +25,7 @@ class App extends Component {
     window.initMap = this.initMap;
   };
 
+  // fetch data from Foursquare API
   getData = () => {
     const endPoint = "https://api.foursquare.com/v2/venues/explore?";
     const parameters = {
@@ -42,28 +47,43 @@ class App extends Component {
         );
       })
       .catch(error => {
-        console.log("ERROR!!! " + error);
+        console.log("ERROR", error);
+        this.setState({ error: true });
       });
+  };
+
+  map = null;
+  infoWindow = null;
+
+  updateInfoWindow = contentString => {
+    if (this.infoWindow) this.infoWindow.setContent(contentString);
+  };
+
+  openInfoWindow = marker => {
+    if (this.infoWindow) this.infoWindow.open(this.map, marker);
   };
 
   // Create a map
   initMap = () => {
-    var map = new window.google.maps.Map(document.getElementById("map"), {
+    const map = new window.google.maps.Map(document.getElementById("map"), {
       center: { lat: 53.34, lng: -6.26 },
       zoom: 13
     });
 
+    this.map = map;
+
     // Create an info window
-    var infoWindow = new window.google.maps.InfoWindow();
+    const infoWindow = new window.google.maps.InfoWindow();
+    this.infoWindow = infoWindow;
 
     // Display dynamic markers
     this.state.venues.map(myVenue => {
-      var contentString = `${myVenue.venue.name}, ${
+      const contentString = `${myVenue.venue.name}, ${
         myVenue.venue.location.address
-      }`;
+      }s`;
 
       // Create marker
-      var marker = new window.google.maps.Marker({
+      const marker = new window.google.maps.Marker({
         position: {
           lat: myVenue.venue.location.lat,
           lng: myVenue.venue.location.lng
@@ -75,20 +95,22 @@ class App extends Component {
       });
 
       // Click on marker
-      marker.addListener("click", function() {
+      marker.addListener("click", () => {
         // Change the content
-        infoWindow.setContent(contentString);
+        this.updateInfoWindow(contentString);
 
         // Open an info window
-        infoWindow.open(map, marker);
+        this.openInfoWindow(marker);
       });
-      marker.addListener("mouseover", function() {
+      // Bounce effect on mouse over
+      marker.addListener("mouseover", () => {
         if (marker.getAnimation() !== null) {
           marker.setAnimation(null);
         } else {
           marker.setAnimation(window.google.maps.Animation.BOUNCE);
         }
       });
+      // Remove bounce effect on mouse out
       marker.addListener("mouseout", function() {
         marker.setAnimation() !== null;
       });
@@ -98,13 +120,15 @@ class App extends Component {
 
   render() {
     return (
-      <main>
+      <main role="application">
         <h1 className="title">Dublin Food</h1>
         <div id="map" />
         <Search
           venues={this.state.venues}
           markers={this.state.markers}
           contentString={this.contentString}
+          updateInfoWindow={this.updateInfoWindow}
+          openInfoWindow={this.openInfoWindow}
         />
       </main>
     );

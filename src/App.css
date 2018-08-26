@@ -21,7 +21,7 @@ body {
 .search {
   display: inline-block;
   position: absolute;
-  top: 10vw;
+  top: 75px;
   padding: 20px;
 }
 
