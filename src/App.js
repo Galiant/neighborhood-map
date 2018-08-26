@@ -2,7 +2,9 @@ import React, { Component } from "react";
 import escapeRegExp from "escape-string-regexp";
 import "./App.css";
 import Search from "./Search";
+import Sidebar from "./Sidebar";
 import Error from "./Error";
+
 import axios from "axios";
 
 class App extends Component {
@@ -11,6 +13,7 @@ class App extends Component {
     matchVenue: [],
     markers: [],
     query: "",
+    openSearch: false,
     error: false
   };
 
@@ -32,7 +35,7 @@ class App extends Component {
       client_id: "SEUCL1M05UTPL3Z3U0HC2SKNULTU2JI4JY0HAM0ZXLAVNIUW",
       client_secret: "WBBHHBLA1AF5O5JF45X5QJKPGWYILXGI5T1FT3RDB4TIP4N1",
       query: "coffee",
-      limit: 25,
+      limit: 20,
       near: "Dublin, IE",
       v: "20182208"
     };
@@ -162,6 +165,13 @@ class App extends Component {
     this.setState({ markers: newMarker });
   };
 
+  // Open/Hide sidebar function
+  updateSidebar = () => {
+    const sidebarIsOpen = this.state.openSearch;
+
+    this.setState({ openSearch: !sidebarIsOpen });
+  };
+
   render() {
     if (this.state.error) {
       return <Error />;
@@ -169,25 +179,28 @@ class App extends Component {
       return (
         <main role="application">
           <h1 className="title">Coffee in Dublin</h1>
+          <Sidebar updateSidebar={this.updateSidebar} />
           <div id="map" />
-          <div className="search">
-            <input
-              type="text"
-              placeholder="Search bars & restaurants"
-              value={this.state.query}
-              onChange={e => this.displayQuery(e.target.value)}
-              className="search-input"
-            />
-            <Search
-              venues={this.state.venues}
-              matchVenue={this.state.matchVenue}
-              markers={this.state.markers}
-              lat={this.lat}
-              lng={this.lng}
-              updateInfoWindow={this.updateInfoWindow}
-              openInfoWindow={this.openInfoWindow}
-            />
-          </div>
+          {this.state.openSearch && (
+            <div className="search">
+              <input
+                type="text"
+                placeholder="Search bars & restaurants"
+                value={this.state.query}
+                onChange={e => this.displayQuery(e.target.value)}
+                className="search-input"
+              />
+              <Search
+                venues={this.state.venues}
+                matchVenue={this.state.matchVenue}
+                markers={this.state.markers}
+                lat={this.lat}
+                lng={this.lng}
+                updateInfoWindow={this.updateInfoWindow}
+                openInfoWindow={this.openInfoWindow}
+              />
+            </div>
+          )}
         </main>
       );
     }

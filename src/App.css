@@ -5,6 +5,7 @@
 html,
 body {
   height: 100%;
+  width: 100%;
   margin: 0;
   padding: 0;
 }
@@ -21,13 +22,55 @@ body {
 .search {
   display: inline-block;
   position: absolute;
-  top: 75px;
+  top: 130px;
   padding: 20px;
+  background-color: black;
+  height: 100vh;
+  width: 25%;
 }
 
 .search-input {
+  width: 90%;
   padding: 10px;
   margin-bottom: 15px;
+}
+
+button {
+  width: 100%;
+  padding: 10px;
+  background-color: white;
+  color: coral;
+  border: 1px solid coral;
+  margin: 2px 0;
+}
+
+button:hover {
+  background-color: coral;
+  color: white;
+  cursor: pointer;
+}
+
+#button-sidebar {
+  background-color: coral;
+  color: white;
+  font-size: 20px;
+  margin-bottom: 0;
+  border: none;
+  border-top: 2px solid coral;
+}
+
+#button-sidebar:hover {
+  background-color: white;
+  color: coral;
+  cursor: pointer;
+  border-top: 2px solid coral;
+}
+
+#button-sidebar:focus {
+  background-color: white;
+  color: coral;
+  cursor: pointer;
+  outline: none;
 }
 
 .error {
