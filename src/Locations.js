@@ -12,16 +12,19 @@ class Locations extends Component {
         `);
         this.props.openInfoWindow(marker);
         marker.setAnimation(window.google.maps.Animation.BOUNCE);
+        setTimeout(() => {
+          marker.setAnimation(null);
+        }, 3000);
       } else {
         marker.setAnimation(null);
       }
     });
   render() {
-    const food = `${this.props.myVenue.venue.name}`;
+    const coffee = `${this.props.myVenue.venue.name}`;
 
     return (
       <div className="locations">
-        <button onClick={this.showInfoWindow}>{food}</button>
+        <button onClick={this.showInfoWindow}>{coffee}</button>
       </div>
     );
   }

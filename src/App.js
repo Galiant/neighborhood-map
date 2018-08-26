@@ -10,16 +10,12 @@ class App extends Component {
     venues: [],
     matchVenue: [],
     markers: [],
-    matchMarker: [],
-    query: [],
+    query: "",
     error: false
   };
 
   componentDidMount() {
     this.getData();
-    if (window.google === undefined) {
-      this.setState({ error: true });
-    }
   }
 
   renderMap = () => {
@@ -35,7 +31,8 @@ class App extends Component {
     const parameters = {
       client_id: "SEUCL1M05UTPL3Z3U0HC2SKNULTU2JI4JY0HAM0ZXLAVNIUW",
       client_secret: "WBBHHBLA1AF5O5JF45X5QJKPGWYILXGI5T1FT3RDB4TIP4N1",
-      query: "food",
+      query: "coffee",
+      limit: 25,
       near: "Dublin, IE",
       v: "20182208"
     };
@@ -94,8 +91,8 @@ class App extends Component {
   // Create a map
   initMap = () => {
     const map = new window.google.maps.Map(document.getElementById("map"), {
-      center: { lat: 53.34, lng: -6.26 },
-      zoom: 14
+      center: { lat: 53.33, lng: -6.27 },
+      zoom: 13.5
     });
 
     this.map = map;
@@ -122,6 +119,8 @@ class App extends Component {
 
     this.state.venues.map(myVenue => {
       const { lat, lng } = myVenue.venue.location;
+      this.lat = lat;
+      this.lng = lng;
       const contentString = `${myVenue.venue.name}, ${
         myVenue.venue.location.address
       }`;
@@ -164,37 +163,45 @@ class App extends Component {
   };
 
   render() {
-    return (
-      <main role="application">
-        <h1 className="title">Dublin Food</h1>
-        <div id="map" />
-        <div className="search">
-          <input
-            type="text"
-            placeholder="Search bars & restaurants"
-            value={this.state.query}
-            onChange={e => this.displayQuery(e.target.value)}
-            className="search-input"
-          />
-          <Search
-            venues={this.state.venues}
-            matchVenue={this.state.matchVenue}
-            markers={this.state.markers}
-            contentString={this.contentString}
-            query={this.state.query}
-            updateInfoWindow={this.updateInfoWindow}
-            openInfoWindow={this.openInfoWindow}
-          />
-        </div>
-      </main>
-    );
+    if (this.state.error) {
+      return <Error />;
+    } else {
+      return (
+        <main role="application">
+          <h1 className="title">Coffee in Dublin</h1>
+          <div id="map" />
+          <div className="search">
+            <input
+              type="text"
+              placeholder="Search bars & restaurants"
+              value={this.state.query}
+              onChange={e => this.displayQuery(e.target.value)}
+              className="search-input"
+            />
+            <Search
+              venues={this.state.venues}
+              matchVenue={this.state.matchVenue}
+              markers={this.state.markers}
+              lat={this.lat}
+              lng={this.lng}
+              updateInfoWindow={this.updateInfoWindow}
+              openInfoWindow={this.openInfoWindow}
+            />
+          </div>
+        </main>
+      );
+    }
   }
 }
 
 function loadScript(url) {
-  var index = window.document.getElementsByTagName("script")[0];
-  var script = window.document.createElement("script");
+  const index = window.document.getElementsByTagName("script")[0];
+  const script = window.document.createElement("script");
   script.src = url;
+  script.onerror = () => {
+    document.getElementById("map").innerHTML =
+      "The map could not be loaded!!! Try again or come back later.";
+  };
   script.async = true;
   script.defer = true;
   index.parentNode.insertBefore(script, index);
