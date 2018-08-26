@@ -49,7 +49,7 @@ class App extends Component {
   // Create a map
   initMap = () => {
     var map = new window.google.maps.Map(document.getElementById("map"), {
-      center: { lat: 53.34, lng: -6.265 },
+      center: { lat: 53.34, lng: -6.26 },
       zoom: 13
     });
 
@@ -70,7 +70,8 @@ class App extends Component {
         },
         map: map,
         title: myVenue.venue.name,
-        id: myVenue.venue.id
+        id: myVenue.venue.id,
+        animation: window.google.maps.Animation.DROP
       });
 
       // Click on marker
@@ -80,6 +81,16 @@ class App extends Component {
 
         // Open an info window
         infoWindow.open(map, marker);
+      });
+      marker.addListener("mouseover", function() {
+        if (marker.getAnimation() !== null) {
+          marker.setAnimation(null);
+        } else {
+          marker.setAnimation(window.google.maps.Animation.BOUNCE);
+        }
+      });
+      marker.addListener("mouseout", function() {
+        marker.setAnimation() !== null;
       });
       this.state.markers.push(marker);
     });
