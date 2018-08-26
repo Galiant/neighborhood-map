@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import escapeRegExp from "escape-string-regexp";
 import "./App.css";
 import Search from "./Search";
 import Error from "./Error";
@@ -7,7 +8,10 @@ import axios from "axios";
 class App extends Component {
   state = {
     venues: [],
+    matchVenue: [],
     markers: [],
+    matchMarker: [],
+    query: [],
     error: false
   };
 
@@ -41,7 +45,8 @@ class App extends Component {
       .then(response => {
         this.setState(
           {
-            venues: response.data.response.groups[0].items
+            venues: response.data.response.groups[0].items,
+            matchVenue: response.data.response.groups[0].items
           },
           this.renderMap()
         );
@@ -55,6 +60,7 @@ class App extends Component {
   map = null;
   infoWindow = null;
 
+  //Info window function
   updateInfoWindow = contentString => {
     if (this.infoWindow) this.infoWindow.setContent(contentString);
   };
@@ -63,11 +69,33 @@ class App extends Component {
     if (this.infoWindow) this.infoWindow.open(this.map, marker);
   };
 
+  // Search function
+  displayQuery = query => {
+    this.setState({ query }, this.theSearch);
+  };
+
+  theSearch = query => {
+    if (this.state.query) {
+      const match = new RegExp(escapeRegExp(this.state.query), "i");
+
+      this.setState(
+        {
+          matchVenue: this.state.venues.filter(myVenue =>
+            match.test(myVenue.venue.name)
+          )
+        },
+        this.updateVisibility
+      );
+    } else {
+      this.setState({ matchVenue: this.state.venues }, this.updateVisibility);
+    }
+  };
+
   // Create a map
   initMap = () => {
     const map = new window.google.maps.Map(document.getElementById("map"), {
       center: { lat: 53.34, lng: -6.26 },
-      zoom: 13
+      zoom: 14
     });
 
     this.map = map;
@@ -77,18 +105,34 @@ class App extends Component {
     this.infoWindow = infoWindow;
 
     // Display dynamic markers
+    this.createMarker();
+  };
+
+  updateVisibility = () => {
+    this.state.markers.forEach(marker => {
+      const isVisible = this.state.matchVenue.find(
+        myVenue => myVenue.venue.id === marker.id
+      );
+      marker.setMap(isVisible ? this.map : null);
+    });
+  };
+
+  createMarker = () => {
+    const newMarker = [];
+
     this.state.venues.map(myVenue => {
+      const { lat, lng } = myVenue.venue.location;
       const contentString = `${myVenue.venue.name}, ${
         myVenue.venue.location.address
-      }s`;
+      }`;
 
       // Create marker
       const marker = new window.google.maps.Marker({
         position: {
-          lat: myVenue.venue.location.lat,
-          lng: myVenue.venue.location.lng
+          lat: lat,
+          lng: lng
         },
-        map: map,
+        map: this.map,
         title: myVenue.venue.name,
         id: myVenue.venue.id,
         animation: window.google.maps.Animation.DROP
@@ -114,8 +158,9 @@ class App extends Component {
       marker.addListener("mouseout", function() {
         marker.setAnimation() !== null;
       });
-      this.state.markers.push(marker);
+      newMarker.push(marker);
     });
+    this.setState({ markers: newMarker });
   };
 
   render() {
@@ -123,13 +168,24 @@ class App extends Component {
       <main role="application">
         <h1 className="title">Dublin Food</h1>
         <div id="map" />
-        <Search
-          venues={this.state.venues}
-          markers={this.state.markers}
-          contentString={this.contentString}
-          updateInfoWindow={this.updateInfoWindow}
-          openInfoWindow={this.openInfoWindow}
-        />
+        <div className="search">
+          <input
+            type="text"
+            placeholder="Search bars & restaurants"
+            value={this.state.query}
+            onChange={e => this.displayQuery(e.target.value)}
+            className="search-input"
+          />
+          <Search
+            venues={this.state.venues}
+            matchVenue={this.state.matchVenue}
+            markers={this.state.markers}
+            contentString={this.contentString}
+            query={this.state.query}
+            updateInfoWindow={this.updateInfoWindow}
+            openInfoWindow={this.openInfoWindow}
+          />
+        </div>
       </main>
     );
   }
