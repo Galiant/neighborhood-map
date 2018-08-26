@@ -1,11 +1,11 @@
 import React, { Component } from "react";
-import escapeRegExp from "escape-string-regexp";
 import "./App.css";
 import Search from "./Search";
 import Sidebar from "./Sidebar";
 import Error from "./Error";
 
 import axios from "axios";
+import escapeRegExp from "escape-string-regexp";
 
 class App extends Component {
   state = {
@@ -124,7 +124,7 @@ class App extends Component {
       const { lat, lng } = myVenue.venue.location;
       this.lat = lat;
       this.lng = lng;
-      const contentString = `${myVenue.venue.name}, ${
+      const contentString = `${myVenue.venue.name} <br>${
         myVenue.venue.location.address
       }`;
 

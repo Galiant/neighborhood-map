@@ -7,7 +7,7 @@ class Locations extends Component {
     this.props.markers.map(marker => {
       if (marker.id === this.props.myVenue.venue.id) {
         this.props.updateInfoWindow(`
-        ${this.props.myVenue.venue.name},
+        ${this.props.myVenue.venue.name} <br>
         ${this.props.myVenue.venue.location.address}
         `);
         this.props.openInfoWindow(marker);
