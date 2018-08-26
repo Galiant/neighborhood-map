@@ -6,10 +6,6 @@ class Locations extends Component {
   showInfoWindow = () =>
     this.props.markers.map(marker => {
       if (marker.id === this.props.myVenue.venue.id) {
-        // Open info window
-        var infoWindow = new window.google.maps.InfoWindow({
-          content: this.props.contentString
-        });
       }
     });
   render() {
