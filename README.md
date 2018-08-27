@@ -42,6 +42,13 @@ npm start
 http://localhost:3000
 ```
 
+## How to run a production build
+
+- npm run build
+- npm install -g serve
+- serve -s build
+- open `http://localhost:5000`
+
 ## Dependencies
 
 - [React framework](https://reactjs.org/)
