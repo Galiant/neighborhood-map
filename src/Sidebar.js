@@ -7,6 +7,7 @@ class Sidebar extends Component {
       <button
         id="button-sidebar"
         aria-label="Search for coffee"
+        role="navigation"
         onClick={this.props.updateSidebar}
       >
         Search for coffee
