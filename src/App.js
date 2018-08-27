@@ -129,9 +129,15 @@ class App extends Component {
       const { lat, lng } = myVenue.venue.location;
       this.lat = lat;
       this.lng = lng;
-      const contentString = `<h4>${myVenue.venue.name}</h4><p>${
-        myVenue.venue.location.address
-      }</p>`;
+      // Display informations for info window
+      const contentString = `
+      <h4>Name:</h4> 
+      ${myVenue.venue.name}
+      <h4>Address:</h4>
+      ${myVenue.venue.location.address} 
+      <h4>Latitude, Longitude:</h4>
+      ${myVenue.venue.location.lat.toFixed(2)}, 
+      ${myVenue.venue.location.lng.toFixed(2)}`;
 
       // Create marker
       const marker = new window.google.maps.Marker({
@@ -184,6 +190,9 @@ class App extends Component {
       return (
         <main role="application">
           <h1 className="title">Coffee in Dublin</h1>
+          <p className="paragraph">
+            Integrated with Google Maps and Foursquare API
+          </p>
           <Sidebar updateSidebar={this.updateSidebar} />
           <div id="map" />
           {this.state.openSearch && (

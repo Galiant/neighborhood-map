@@ -6,10 +6,16 @@ class Locations extends Component {
   showInfoWindow = () =>
     this.props.markers.map(marker => {
       if (marker.id === this.props.myVenue.venue.id) {
-        this.props.updateInfoWindow(`
-        <h4>${this.props.myVenue.venue.name}</h4><p>
-        ${this.props.myVenue.venue.location.address}</p>
-        `);
+        this.props.updateInfoWindow(
+          // Display informations for info window
+          `<h4>Name:</h4> 
+          ${this.props.myVenue.venue.name}
+          <h4>Address:</h4>
+          ${this.props.myVenue.venue.location.address} 
+          <h4>Latitude, Longitude:</h4>
+          ${this.props.myVenue.venue.location.lat.toFixed(2)}, 
+          ${this.props.myVenue.venue.location.lng.toFixed(2)}`
+        );
         this.props.openInfoWindow(marker);
         marker.setAnimation(window.google.maps.Animation.BOUNCE);
         setTimeout(() => {

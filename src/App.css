@@ -15,6 +15,11 @@ body {
   color: coral;
 }
 
+.paragraph {
+  text-align: center;
+  padding-bottom: 10px;
+}
+
 #map {
   height: 100vh;
 }
