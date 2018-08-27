@@ -54,3 +54,4 @@ http://localhost:3000
 - [React framework](https://reactjs.org/)
 - [Maps JavaScript API](https://developers.google.com/maps/documentation/javascript/tutorial)
 - [Foursquare API](https://foursquare.com/)
+- [axios](https://github.com/axios/axios)
