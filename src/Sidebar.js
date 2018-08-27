@@ -4,7 +4,11 @@ import "./App.css";
 class Sidebar extends Component {
   render() {
     return (
-      <button id="button-sidebar" onClick={this.props.updateSidebar}>
+      <button
+        id="button-sidebar"
+        aria-label="Search for coffee"
+        onClick={this.props.updateSidebar}
+      >
         Search for coffee
       </button>
     );

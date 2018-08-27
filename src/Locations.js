@@ -7,14 +7,14 @@ class Locations extends Component {
     this.props.markers.map(marker => {
       if (marker.id === this.props.myVenue.venue.id) {
         this.props.updateInfoWindow(`
-        ${this.props.myVenue.venue.name} <br>
-        ${this.props.myVenue.venue.location.address}
+        <h4>${this.props.myVenue.venue.name}</h4><p>
+        ${this.props.myVenue.venue.location.address}</p>
         `);
         this.props.openInfoWindow(marker);
         marker.setAnimation(window.google.maps.Animation.BOUNCE);
         setTimeout(() => {
           marker.setAnimation(null);
-        }, 3000);
+        }, 1500);
       } else {
         marker.setAnimation(null);
       }
@@ -24,7 +24,9 @@ class Locations extends Component {
 
     return (
       <div className="locations">
-        <button onClick={this.showInfoWindow}>{coffee}</button>
+        <button onClick={this.showInfoWindow} role="button">
+          {coffee}
+        </button>
       </div>
     );
   }

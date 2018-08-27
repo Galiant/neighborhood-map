@@ -7,6 +7,11 @@ import Error from "./Error";
 import axios from "axios";
 import escapeRegExp from "escape-string-regexp";
 
+// Handle Google Maps error
+window.gm_authFailure = () => {
+  alert("Authentication failure, check your Google API key!");
+};
+
 class App extends Component {
   state = {
     venues: [],
@@ -35,7 +40,7 @@ class App extends Component {
       client_id: "SEUCL1M05UTPL3Z3U0HC2SKNULTU2JI4JY0HAM0ZXLAVNIUW",
       client_secret: "WBBHHBLA1AF5O5JF45X5QJKPGWYILXGI5T1FT3RDB4TIP4N1",
       query: "coffee",
-      limit: 20,
+      limit: 15,
       near: "Dublin, IE",
       v: "20182208"
     };
@@ -124,9 +129,9 @@ class App extends Component {
       const { lat, lng } = myVenue.venue.location;
       this.lat = lat;
       this.lng = lng;
-      const contentString = `${myVenue.venue.name} <br>${
+      const contentString = `<h4>${myVenue.venue.name}</h4><p>${
         myVenue.venue.location.address
-      }`;
+      }</p>`;
 
       // Create marker
       const marker = new window.google.maps.Marker({
