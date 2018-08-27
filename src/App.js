@@ -42,11 +42,11 @@ class App extends Component {
 
     axios
       .get(endPoint + new URLSearchParams(parameters))
-      .then(response => {
+      .then(resp => {
         this.setState(
           {
-            venues: response.data.response.groups[0].items,
-            matchVenue: response.data.response.groups[0].items
+            venues: resp.data.response.groups[0].items,
+            matchVenue: resp.data.response.groups[0].items
           },
           this.renderMap()
         );
@@ -184,11 +184,11 @@ class App extends Component {
           {this.state.openSearch && (
             <div className="search">
               <input
+                className="search-input"
                 type="text"
                 placeholder="Search bars & restaurants"
                 value={this.state.query}
                 onChange={e => this.displayQuery(e.target.value)}
-                className="search-input"
               />
               <Search
                 venues={this.state.venues}

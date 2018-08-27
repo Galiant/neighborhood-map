@@ -1,5 +1,4 @@
 import React, { Component } from "react";
-import escapeRegExp from "escape-string-regexp";
 import Locations from "./Locations";
 import "./App.css";
 
@@ -7,7 +6,7 @@ class Search extends Component {
   render() {
     return (
       <div>
-        {this.props.venues.map(myVenue => {
+        {this.props.matchVenue.map(myVenue => {
           return (
             <Locations
               key={myVenue.venue.id}
