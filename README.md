@@ -1,4 +1,4 @@
-# Neighborhood map - React App
+# Coffee in Dublin - React App
 
 ## Front-End Web Developer Nanodegree - Udacity | Google Scholarship
 
